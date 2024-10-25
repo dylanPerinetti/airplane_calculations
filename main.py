@@ -48,4 +48,4 @@ def main(fichier_json):
     print(f"Puissance moteur nécessaire: {puissance_moteur} W")
 
 # Appel de la fonction principale avec le fichier JSON contenant les données
-main('H1-RACER_data.json')
+main('donnees_h1_racer.json')
