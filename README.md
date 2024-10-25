@@ -1,4 +1,3 @@
-
 # Projet de Calcul des Caractéristiques d'un Avion
 
 Ce projet utilise Python pour calculer différentes caractéristiques aérodynamiques d’un avion en se basant sur des valeurs fournies dans un fichier JSON. Il permet, entre autres, de calculer le nombre de Reynolds, la portance, la traînée, la surface alaire nécessaire et la puissance moteur.
@@ -7,13 +6,13 @@ Ce projet utilise Python pour calculer différentes caractéristiques aérodynam
 - [Installation](#installation)
 - [Utilisation](#utilisation)
 - [Structure du Projet](#structure-du-projet)
-- [Exemple d'Entrée JSON](#exemple-dentrée-json)
+- [Exemple de Fichier JSON](#exemple-de-fichier-json)
 - [Calculs Effectués](#calculs-effectués)
 - [Licence](#licence)
 
 ## Installation
 
-1. **Cloner le dépôt**:
+1. **Cloner le dépôt** :
    ```bash
    git clone https://github.com/dyanPerinetti/airplane_calculations.git
    cd airplane_calculations
@@ -24,18 +23,23 @@ Ce projet utilise Python pour calculer différentes caractéristiques aérodynam
    pip install -r requirements.txt
    ```
 
-> Note : Le script utilise uniquement des bibliothèques standard de Python et ne nécessite donc aucune dépendance externe.
+> **Note** : Le script utilise uniquement des bibliothèques standard de Python et ne nécessite donc aucune dépendance externe.
 
 ## Utilisation
 
-1. Créez un fichier JSON avec les données de l’avion à analyser. Voir la section [Exemple d'Entrée JSON](#exemple-dentrée-json) pour un exemple.
+1. **Préparer le fichier JSON** :
 
-2. Exécutez le script principal en passant le fichier JSON comme argument :
+   Créez un fichier JSON avec les données de l’avion à analyser. Voir la section [Exemple de Fichier JSON](#exemple-de-fichier-json) pour un exemple.
+
+2. **Exécuter le script principal** :
+
    ```bash
    python main.py donnees_h1_racer.json
    ```
 
-3. Le script affichera dans le terminal les résultats calculés, tels que le nombre de Reynolds, les forces de portance et de traînée, la surface alaire nécessaire et la puissance moteur requise.
+3. **Consulter les résultats** :
+
+   Le script affichera dans le terminal les résultats calculés, tels que le nombre de Reynolds, les forces de portance et de traînée, la surface alaire nécessaire et la puissance moteur requise.
 
 ## Structure du Projet
 
@@ -46,41 +50,69 @@ Ce projet utilise Python pour calculer différentes caractéristiques aérodynam
 └── donnees_h1_racer.json  # Exemple de données JSON pour le H-1 Racer
 ```
 
-## Exemple d'Entrée JSON
+## Exemple de Fichier JSON
 
 Un fichier JSON doit être structuré comme suit :
 
 ```json
 {
-  "vitesse_vol": 560,
-  "distance_parcourue": 4800,
-  "temps_vol": 6.5,
-  "corde": 1.9,
+  "vitesse_vol": 70,
+  "corde": 1.5,
   "densite_air": 1.225,
-  "masse_avion": 2500,
-  "surface_alaire": 14.6,
-  "finesse": 10,
-  "rendement_helice": 0.85
+  "masse_avion": 1200,
+  "surface_alaire": 16,
+  "finesse": 15,
+  "rendement_helice": 0.85,
+  "cz": 0.6,
+  "cx": 0.007
 }
 ```
 
 ### Champs requis :
-- `vitesse_vol` : Vitesse de vol en km/h.
-- `distance_parcourue` : Distance totale parcourue en km.
-- `temps_vol` : Temps total de vol en heures.
-- `corde` : Longueur de la corde de l'aile en mètres.
-- `densite_air` : Densité de l'air en kg/m³.
-- `masse_avion` : Masse de l'avion en kg.
-- `surface_alaire` : Surface de l'aile en m².
-- `finesse` : Ratio de finesse de l'aile.
-- `rendement_helice` : Rendement de l’hélice.
+
+- `vitesse_vol` : Vitesse de vol en **mètres par seconde (m/s)**.
+- `corde` : Longueur de la corde de l'aile en **mètres (m)**.
+- `densite_air` : Densité de l'air en **kilogrammes par mètre cube (kg/m³)**.
+- `masse_avion` : Masse de l'avion en **kilogrammes (kg)**.
+- `surface_alaire` : Surface de l'aile en **mètres carrés (m²)**.
+- `finesse` : Finesse de l'aile (rapport portance/traînée).
+- `rendement_helice` : Rendement de l’hélice (valeur entre 0 et 1).
+- `cz` : Coefficient de portance.
+- `cx` : Coefficient de traînée.
 
 ## Calculs Effectués
 
-1. **Nombre de Reynolds** : Calculé à partir de la vitesse, la corde de l’aile et la viscosité de l’air.
-2. **Portance et Traînée** : Forces calculées pour un profil d'aile donné.
-3. **Surface Alaire** : Surface nécessaire pour obtenir la portance suffisante en vol.
+1. **Nombre de Reynolds** : Calculé à partir de la vitesse de vol, de la corde de l’aile et de la viscosité cinématique de l’air.
+   \[
+   \text{Re} = \frac{V \times C}{\nu}
+   \]
+   - \( V \) : Vitesse de vol (m/s)
+   - \( C \) : Corde de l'aile (m)
+   - \( \nu \) : Viscosité cinématique de l'air (m²/s)
+
+2. **Portance et Traînée** : Forces calculées à partir des coefficients aérodynamiques.
+   \[
+   F_{\text{portance}} = \frac{1}{2} \times \rho \times S \times C_z \times V^2
+   \]
+   \[
+   F_{\text{traînée}} = \frac{1}{2} \times \rho \times S \times C_x \times V^2
+   \]
+   - \( \rho \) : Densité de l'air (kg/m³)
+   - \( S \) : Surface alaire (m²)
+   - \( C_z \), \( C_x \) : Coefficients de portance et de traînée
+   - \( V \) : Vitesse de vol (m/s)
+
+3. **Surface Alaire Nécessaire** : Surface requise pour obtenir la portance suffisante en vol.
+   \[
+   S = \frac{2 \times m \times g}{\rho \times C_z \times V^2}
+   \]
+   - \( m \) : Masse de l'avion (kg)
+   - \( g \) : Accélération due à la gravité (9.81 m/s²)
+
 4. **Puissance Moteur** : Estimation de la puissance moteur requise pour maintenir un vol constant.
+   \[
+   P = \frac{m \times g \times V}{\text{finesse} \times \text{rendement hélice}}
+   \]
 
 Les résultats sont affichés dans le terminal et permettent d'évaluer les paramètres de prédimensionnement de l'avion choisi.
 
