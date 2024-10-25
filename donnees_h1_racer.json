@@ -1,11 +1,11 @@
 {
-  "vitesse_vol": 560,
-  "distance_parcourue": 4800,
-  "temps_vol": 6.5,
-  "corde": 1.9,
-  "densite_air": 1.225,
-  "masse_avion": 2500,
-  "surface_alaire": 14.6,
-  "finesse": 10,
-  "rendement_helice": 0.85
+    "vitesse_vol": 70,
+    "corde": 1.5,
+    "densite_air": 1.225,
+    "surface_alaire": 16,
+    "masse_avion": 1200,
+    "finesse": 15,
+    "rendement_helice": 0.85,
+    "cz": 0.6,
+    "cx": 0.007
 }
