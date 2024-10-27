@@ -65,21 +65,21 @@ Un fichier JSON doit être structuré comme suit :
 
 ```json
 {
-  "vitesse_vol": 70,               // Vitesse de vol en m/s
-  "corde": 1.5,                    // Corde initiale de l'aile en m
-  "densite_air": 1.225,            // Densité de l'air en kg/m³
-  "masse_avion": 1200,             // Masse à vide de l'avion en kg
-  "surface_alaire": 16,            // Surface alaire initiale en m²
-  "finesse": 15,                   // Finesse de l'avion
-  "rendement_helice": 0.85,        // Rendement de l'hélice (entre 0 et 1)
-  "cz": 0.6,                       // Coefficient de portance
-  "cx": 0.007,                     // Coefficient de traînée
-  "rendement_moteur": 0.85,        // Rendement du moteur (entre 0 et 1)
-  "pouvoir_calorifique": 43e6,     // Pouvoir calorifique du carburant en J/kg
-  "temps_vol": 2.0,                // Temps de vol en heures
-  "allongement": 6.0,              // Allongement de l'aile (rapport envergure²/surface)
-  "coeff_empennage_h": 0.25,       // Coefficient pour l'empennage horizontal
-  "coeff_empennage_v": 0.15        // Coefficient pour l'empennage vertical
+  "vitesse_vol": 70,               
+  "corde": 1.5,                    
+  "densite_air": 1.225,            
+  "masse_avion": 1200,             
+  "surface_alaire": 16,       
+  "finesse": 15,                  
+  "rendement_helice": 0.85,
+  "cz": 0.6,                      
+  "cx": 0.007,
+  "rendement_moteur": 0.85,       
+  "pouvoir_calorifique": 43e6,
+  "temps_vol": 2.0,
+  "allongement": 6.0,            
+  "coeff_empennage_h": 0.25,     
+  "coeff_empennage_v": 0.15      
 }
 ```
 
