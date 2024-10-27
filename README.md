@@ -15,7 +15,7 @@ Ce projet vise à calculer diverses caractéristiques aérodynamiques et de perf
 
 ## Introduction
 
-Ce projet a pour objectif de répondre à une série de questions visant à dimensionner un avion de l'époque du **Spirit of St. Louis**. Il intègre des calculs pour estimer la masse de carburant, la puissance moteur, les dimensions de l'aile, les surfaces d'empennage, etc., en suivant les équations et méthodes présentées dans un cours spécifique (référencé par des équations telles que Eq. 9.1, Eq. 9.6, etc.).
+Ce projet a pour objectif de répondre à une série de questions visant à dimensionner un avion de l'époque du **Spirit of St. Louis**. Il intègre des calculs pour estimer la masse de carburant, la puissance moteur, les dimensions de l'aile, les surfaces d'empennage, etc., en suivant les équations et méthodes présentées dans le pdf (référencé par des équations telles que Eq. 9.1, Eq. 9.6, etc.).
 
 ## Installation
 
