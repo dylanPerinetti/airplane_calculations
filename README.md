@@ -1,6 +1,6 @@
-# Projet de Calcul des Caractéristiques d'un Avion Historique
+# Prédimensionnement d'un Avion Historique
 
-Ce projet vise à calculer diverses caractéristiques aérodynamiques et de performance d'un avion historique, similaire au **Spirit of St. Louis**. Il suit une série d'étapes pour estimer des paramètres clés tels que la masse de carburant nécessaire, la puissance moteur requise, les dimensions de l'aile, etc.
+Ce projet a pour objectif de **prédimensionner un avion historique** en automatisant les calculs nécessaires à l'aide d'un script Python. En se basant sur le célèbre **Hughes H-1 Racer**, le script calcule les caractéristiques principales de l'avion, telles que la puissance nécessaire, la masse de carburant, les dimensions de l'aile et de l'empennage, ainsi que des paramètres aérodynamiques essentiels.
 
 ## Table des matières
 
@@ -8,218 +8,393 @@ Ce projet vise à calculer diverses caractéristiques aérodynamiques et de perf
 - [Installation](#installation)
 - [Utilisation](#utilisation)
 - [Structure du Projet](#structure-du-projet)
-- [Exemple de Fichier JSON](#exemple-de-fichier-json)
+- [Exemples de Fichiers JSON](#exemples-de-fichiers-json)
 - [Calculs Effectués](#calculs-effectués)
 - [Correspondance avec les Étapes de l'Exercice](#correspondance-avec-les-étapes-de-lexercice)
+- [Résultats](#résultats)
+- [Personnalisation](#personnalisation)
+- [Contributions](#contributions)
 - [Licence](#licence)
+
+---
 
 ## Introduction
 
-Ce projet a pour objectif de répondre à une série de questions visant à dimensionner un avion de l'époque du **Spirit of St. Louis**. Il intègre des calculs pour estimer la masse de carburant, la puissance moteur, les dimensions de l'aile, les surfaces d'empennage, etc., en suivant les équations et méthodes présentées dans le pdf (référencé par des équations telles que Eq. 9.1, Eq. 9.6, etc.).
+Le **Hughes H-1 Racer** est un avion emblématique des années 1930, connu pour ses performances exceptionnelles et ses avancées technologiques. Ce projet vise à recréer le processus de prédimensionnement de cet avion en utilisant des méthodes de calcul modernes et automatisées.
+
+Le script Python fourni permet de :
+
+- Calculer la puissance mécanique et chimique nécessaires en croisière.
+- Estimer la masse totale de carburant requise, en incluant des marges pour le décollage et la montée.
+- Déterminer les dimensions clés de l'avion : surface alaire, envergure, corde moyenne, surfaces d'empennage, etc.
+- Calculer des paramètres aérodynamiques tels que le coefficient de portance et le nombre de Reynolds.
+- Générer un rapport détaillé des résultats dans un fichier texte.
+
+---
 
 ## Installation
 
-1. **Cloner le dépôt** :
+1. **Cloner le dépôt :**
 
    ```bash
-   git clone https://github.com/dyanPerinetti/airplane_calculations.git
-   cd airplane_calculations
+   git clone https://github.com/votre-utilisateur/predimensionnement-avion.git
+   cd predimensionnement-avion
    ```
 
-2. **Installer les dépendances** (si applicable) :
+2. **Vérifier l'environnement Python :**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+   Assurez-vous d'avoir **Python 3** installé sur votre système.
 
-   > **Note** : Le script utilise uniquement des bibliothèques standard de Python et ne nécessite donc aucune dépendance externe.
+3. **Installer les dépendances :**
+
+   Aucune dépendance externe n'est requise. Le script utilise uniquement les bibliothèques standard de Python.
+
+---
 
 ## Utilisation
 
-1. **Préparer le fichier JSON** :
+1. **Préparer les fichiers de données :**
 
-   Créez un fichier JSON avec les données de l’avion à analyser. Voir la section [Exemple de Fichier JSON](#exemple-de-fichier-json) pour un exemple.
+   - **`avion_data.json`** : Contient les données spécifiques à l'avion (exemple ci-dessous).
+   - **`parametres.json`** : Contient les paramètres environnementaux et les constantes physiques (exemple ci-dessous).
 
-2. **Exécuter le script principal** :
+2. **Exécuter le script principal :**
 
    ```bash
-   python main.py donnees_avion.json
+   python calculs_avion.py
    ```
 
-3. **Consulter les résultats** :
+   > **Note :** Le script doit être exécuté dans le même répertoire que les fichiers JSON.
 
-   Le script affichera dans le terminal les résultats calculés, tels que la masse de carburant nécessaire, la puissance moteur requise, le nombre de Reynolds, la surface alaire nécessaire, les dimensions de l'aile, et les surfaces d'empennage.
+3. **Consulter les résultats :**
+
+   - Les résultats sont affichés dans le terminal.
+   - Un fichier texte nommé `predim_<nom_de_l_avion>.txt` est généré, contenant un rapport détaillé des calculs.
+
+---
 
 ## Structure du Projet
 
 ```
 .
-├── main.py                # Script principal pour exécuter les calculs
-├── README.md              # Documentation du projet
-└── donnees_avion.json     # Exemple de données JSON pour l'avion historique
+├── calculs_avion.py         # Script principal pour exécuter les calculs
+├── avion_data.json          # Données spécifiques à l'avion
+├── parametres.json          # Paramètres environnementaux et constantes physiques
+├── predim_<nom_avion>.txt   # Rapport généré des résultats (après exécution)
+├── README.md                # Documentation du projet
+└── LICENSE                  # Licence du projet
 ```
 
-## Exemple de Fichier JSON
+---
 
-Un fichier JSON doit être structuré comme suit :
+## Exemples de Fichiers JSON
+
+### `avion_data.json`
 
 ```json
 {
-  "vitesse_vol": 70,               
-  "corde": 1.5,                    
-  "densite_air": 1.225,            
-  "masse_avion": 1200,             
-  "surface_alaire": 16,       
-  "finesse": 15,                  
-  "rendement_helice": 0.85,
-  "cz": 0.6,                      
-  "cx": 0.007,
-  "rendement_moteur": 0.85,       
-  "pouvoir_calorifique": 43e6,
-  "temps_vol": 2.0,
-  "allongement": 6.0,            
-  "coeff_empennage_h": 0.25,     
-  "coeff_empennage_v": 0.15      
+    "nom_de_l_avion": "Hughes_H-1_Racer",
+    "masse_a_vide": 1800,
+    "masse_pilote": 80,
+    "masse_charge_utile": 20,
+    "puissance_moteur_max": 500000,
+    "vitesse_croisiere": 111,
+    "allongement": 7,
+    "finesse": 8,
+    "corde_moyenne": 1.8,
+    "surface_alaire_estimee": 17,
+    "temps_vol": 10800,
+    "coefficient_portance_fournie": 0.55,
+    "rendement_helice": 0.8,
+    "rendement_moteur": 0.25
 }
 ```
 
-### Champs requis :
+- **`nom_de_l_avion`** : Nom de l'avion.
+- **`masse_a_vide`** : Masse à vide de l'avion en kg.
+- **`masse_pilote`** : Masse du pilote en kg.
+- **`masse_charge_utile`** : Masse des charges utiles en kg.
+- **`puissance_moteur_max`** : Puissance maximale du moteur en Watts.
+- **`vitesse_croisiere`** : Vitesse de croisière en m/s.
+- **`allongement`** : Allongement de l'aile (rapport envergure²/surface alaire).
+- **`finesse`** : Finesse totale de l'avion.
+- **`corde_moyenne`** : Corde moyenne de l'aile en m.
+- **`surface_alaire_estimee`** : Surface alaire estimée en m².
+- **`temps_vol`** : Temps de vol en secondes.
+- **`coefficient_portance_fournie`** : Coefficient de portance fourni (par exemple, par un logiciel comme PredimRC).
+- **`rendement_helice`** : Rendement de l'hélice.
+- **`rendement_moteur`** : Rendement du moteur.
 
-- **`vitesse_vol`** : Vitesse de vol en **mètres par seconde (m/s)**.
-- **`corde`** : Corde initiale de l'aile en **mètres (m)**.
-- **`densite_air`** : Densité de l'air en **kilogrammes par mètre cube (kg/m³)**.
-- **`masse_avion`** : Masse à vide de l'avion en **kilogrammes (kg)**.
-- **`surface_alaire`** : Surface alaire initiale en **mètres carrés (m²)**.
-- **`finesse`** : Finesse de l'avion (rapport portance/traînée).
-- **`rendement_helice`** : Rendement de l’hélice (valeur entre 0 et 1).
-- **`cz`** : Coefficient de portance.
-- **`cx`** : Coefficient de traînée.
-- **`rendement_moteur`** : Rendement du moteur (valeur entre 0 et 1).
-- **`pouvoir_calorifique`** : Pouvoir calorifique du carburant en **joules par kilogramme (J/kg)**.
-- **`temps_vol`** : Temps de vol en **heures (h)**.
-- **`allongement`** : Allongement de l'aile (valeur positive).
-- **`coeff_empennage_h`** : Coefficient pour l'empennage horizontal.
-- **`coeff_empennage_v`** : Coefficient pour l'empennage vertical.
+### `parametres.json`
+
+```json
+{
+    "densite_air": 1.2,
+    "viscosite_air": 1.56e-5,
+    "gravite": 9.81,
+    "pouvoir_calorifique": 44000000
+}
+```
+
+- **`densite_air`** : Densité de l'air en kg/m³.
+- **`viscosite_air`** : Viscosité cinématique de l'air en m²/s.
+- **`gravite`** : Accélération due à la gravité en m/s².
+- **`pouvoir_calorifique`** : Pouvoir calorifique du carburant en J/kg.
+
+---
 
 ## Calculs Effectués
 
 Le script suit une série d'étapes pour calculer les caractéristiques de l'avion :
 
-### 1. **Hypothèse initiale sur la masse de carburant**
+1. **Calcul de la puissance mécanique en croisière (\(P_m\)) :**
 
-Une estimation initiale de la masse de carburant est faite (par exemple, 100 kg). Cette valeur sera ajustée lors des itérations pour converger vers une masse cohérente.
+   \[
+   P_m = \text{pourcentage}_{P_m} \times P_{m0}
+   \]
 
-### 2. **Calcul des forces de portance et de traînée**
+   - \(\text{pourcentage}_{P_m} = 0.72\) (72 % de la puissance maximale).
+   - \(P_{m0}\) : Puissance maximale du moteur.
 
-Utilise les coefficients de portance (`cz`) et de traînée (`cx`) pour calculer les forces correspondantes :
+2. **Calcul de la puissance chimique nécessaire (\(P_c\)) :**
 
-\[
-F_{\text{portance}} = \frac{1}{2} \times \rho \times S \times C_z \times V^2
-\]
+   \[
+   P_c = \frac{P_m}{\nu_m}
+   \]
 
-\[
-F_{\text{traînée}} = \frac{1}{2} \times \rho \times S \times C_x \times V^2
-\]
+   - \(\nu_m\) : Rendement du moteur.
 
-### 3. **Calcul de la puissance moteur nécessaire**
+3. **Calcul du débit massique de carburant (\(\dot{m}_c\)) :**
 
-La puissance nécessaire est calculée en utilisant la force de traînée et la vitesse de vol, en tenant compte du rendement du moteur :
+   \[
+   \dot{m}_c = \frac{P_m}{\nu_h \nu_m \text{PCI}}
+   \]
 
-\[
-P_{\text{nécessaire}} = \frac{F_{\text{traînée}} \times V}{\eta_{\text{moteur}}}
-\]
+   - \(\nu_h\) : Rendement de l'hélice.
+   - \(\text{PCI}\) : Pouvoir calorifique du carburant.
 
-### 4. **Calcul de la masse de carburant nécessaire**
+4. **Calcul de la masse totale de carburant (\(M_c\)) :**
 
-Utilise le pouvoir calorifique du carburant pour estimer la masse de carburant nécessaire pour le temps de vol spécifié :
+   \[
+   M_c = \dot{m}_c \times t_{\text{vol}}
+   \]
 
-\[
-m_{\text{carburant}} = \frac{P_{\text{nécessaire}} \times t_{\text{vol}} \times 3600}{q_{\text{carburant}}}
-\]
+   - \(t_{\text{vol}}\) : Temps de vol en secondes.
 
-Où :
+5. **Ajout d'une marge pour le décollage et la montée :**
 
-- \( P_{\text{nécessaire}} \) : Puissance en watts (W)
-- \( t_{\text{vol}} \) : Temps de vol en heures (h)
-- \( q_{\text{carburant}} \) : Pouvoir calorifique du carburant en J/kg
+   \[
+   M_c^{\text{total}} = M_c \times 1.25
+   \]
 
-### 5. **Itération jusqu'à convergence de la masse de carburant**
+   - Marge de 25 % ajoutée.
 
-Le calcul de la masse de carburant est itéré jusqu'à ce que la différence entre l'hypothèse précédente et la nouvelle valeur soit négligeable.
+6. **Calcul de la masse minimale de carburant à emporter (\(m_c^{\text{min}}\)) :**
 
-### 6. **Calcul du nombre de Reynolds**
+   \[
+   m_c^{\text{min}} = \frac{P_{m0}}{K \nu_m \text{PCI}} \left(1 - e^{-K t_{\text{vol}}}\right)
+   \]
 
-Calculé à partir de la vitesse de vol, de la corde de l'aile et de la viscosité cinématique de l'air :
+   - \(K = \frac{g V}{\nu_h \nu_m \text{PCI} f_{\text{tot}}}\)
+   - \(f_{\text{tot}}\) : Finesse totale.
 
-\[
-\text{Re} = \frac{V \times C}{\nu}
-\]
+7. **Calcul de la masse totale de l'avion (\(m\)) :**
 
-- \( \nu \) : Viscosité cinématique de l'air (15.68 × 10⁻⁶ m²/s à 15°C)
+   \[
+   m = m_{\text{vide}} + M_c^{\text{total}} + m_{\text{pilote}} + m_{\text{charge\_utile}}
+   \]
 
-### 7. **Calcul de la surface alaire nécessaire**
+8. **Calcul du nombre de Reynolds (\(Re\)) :**
 
-Calcule la surface alaire minimale nécessaire pour générer la portance suffisante pour le poids total (masse de l'avion + masse de carburant) :
+   \[
+   Re = \frac{V \times l}{\nu_{\text{air}}}
+   \]
 
-\[
-S_{\text{nécessaire}} = \frac{2 \times m_{\text{total}} \times g}{\rho \times C_z \times V^2}
-\]
+   - \(l\) : Corde moyenne de l'aile.
 
-- \( m_{\text{total}} \) : Masse totale de l'avion (masse à vide + masse de carburant)
-- \( g \) : Accélération gravitationnelle (9.81 m/s²)
+9. **Calcul du coefficient de portance (\(C_z\)) :**
 
-### 8. **Calcul des dimensions de l'aile**
+   \[
+   C_z = \frac{2 m g}{\rho S V^2}
+   \]
 
-Utilise l'allongement pour calculer l'envergure et la corde moyenne :
+   - \(\rho\) : Densité de l'air.
+   - \(S\) : Surface alaire estimée.
 
-\[
-b = \sqrt{A \times S}
-\]
+10. **Calcul de la surface alaire requise (\(S_{\text{required}}\)) :**
 
-\[
-C = \frac{S}{b}
-\]
+    \[
+    S_{\text{required}} = \frac{2 m g}{\rho C_z V^2}
+    \]
 
-- \( A \) : Allongement de l'aile
+11. **Calcul de l'envergure (\(L\)) et de la corde moyenne (\(l\)) :**
 
-### 9. **Calcul des surfaces d'empennage**
+    \[
+    L = \sqrt{\lambda \times S_{\text{required}}}
+    \]
 
-Calcule les surfaces de l'empennage horizontal et vertical en utilisant des coefficients proportionnels à la surface alaire :
+    \[
+    l = \frac{S_{\text{required}}}{L}
+    \]
 
-\[
-S_{\text{empennage\_h}} = k_h \times S
-\]
+    - \(\lambda\) : Allongement de l'aile.
 
-\[
-S_{\text{empennage\_v}} = k_v \times S
-\]
+12. **Calcul de la géométrie de l'empennage et des ailerons :**
 
-- \( k_h \), \( k_v \) : Coefficients pour les empennages horizontal et vertical
+    - **Surface du stabilisateur horizontal (\(S_{\text{stab}}\)) :**
+
+      \[
+      S_{\text{stab}} = 0.15 \times S_{\text{required}}
+      \]
+
+    - **Surface de la dérive verticale (\(S_{\text{dériv}}\)) :**
+
+      \[
+      S_{\text{dériv}} = 0.6 \times S_{\text{stab}}
+      \]
+
+    - **Surface des ailerons (\(S_{\text{ail}}\)) :**
+
+      \[
+      S_{\text{ail}} = 0.1 \times S_{\text{required}}
+      \]
+
+    - **Surface des volets mobiles (\(S_{\text{volets}}\)) :**
+
+      \[
+      S_{\text{volets}} = 0.4 \times S_{\text{stab}}
+      \]
+
+    - **Bras de levier du stabilisateur (\(l_{\text{bras}}\)) :**
+
+      \[
+      l_{\text{bras}} = 2.5 \times l
+      \]
+
+---
 
 ## Correspondance avec les Étapes de l'Exercice
 
-Le script correspond aux étapes suivantes :
+Le script couvre les étapes suivantes de l'exercice :
 
-1. **Choix d’un avion historique** : Les données du fichier JSON doivent refléter un avion de l'époque du **Spirit of St. Louis**.
+1. **Choix d'un avion historique :**
 
-2. **Choix d’une vitesse et d’un temps de trajet réaliste** : Les valeurs `vitesse_vol` et `temps_vol` sont définies en fonction des performances de l'avion et des capacités des pilotes.
+   - Utilisation du **Hughes H-1 Racer** comme référence.
 
-3. **Hypothèse sur la masse de carburant et calcul de la puissance moteur** : Le script fait une hypothèse initiale sur la masse de carburant et calcule la puissance moteur nécessaire.
+2. **Détermination des performances :**
 
-4. **Calcul de la masse minimale de carburant et convergence** : La masse de carburant est recalculée jusqu'à convergence.
+   - Vitesse de croisière et temps de vol réalistes basés sur les données historiques.
 
-5. **Choix d’un moteur d’époque** : Une fois la puissance moteur nécessaire calculée, vous pouvez choisir un moteur historique approprié.
+3. **Hypothèse sur la masse de carburant et calcul de la puissance moteur :**
 
-6. **Calcul du nombre de Reynolds** : Calculé avec l'équation appropriée.
+   - Calculs détaillés de la puissance et de la masse de carburant.
 
-7. **Détermination du coefficient de portance** : Le coefficient de portance `cz` doit être déterminé selon la méthode proposée en Section 9.2 (à adapter si nécessaire).
+4. **Calcul de la masse minimale de carburant à emporter :**
 
-8. **Calcul de la surface alaire** : Utilise l'équation (9.6) pour calculer la surface alaire nécessaire.
+   - Utilisation de l'équation spécifique pour déterminer \(m_c^{\text{min}}\).
 
-9. **Modification de l’envergure et de la corde** : Les dimensions de l'aile sont ajustées pour respecter la surface alaire nécessaire.
+5. **Choix d'un moteur d'époque en fonction de la puissance calculée :**
 
-10. **Calcul de la géométrie de l’empennage et des ailerons** : Les surfaces d'empennage sont calculées à partir des ordres de grandeur donnés en Section 9.3.
+   - Le moteur **Pratt & Whitney R-1535** correspond aux besoins en puissance.
+
+6. **Calcul du nombre de Reynolds :**
+
+   - Calculé pour caractériser l'écoulement autour de l'aile.
+
+7. **Détermination du coefficient de portance et de l'angle de calage :**
+
+   - Comparaison entre le \(C_z\) fourni et le \(C_z\) calculé.
+
+8. **Calcul de la surface alaire :**
+
+   - Détermination de la surface alaire requise pour soutenir la masse de l'avion.
+
+9. **Modification de l'envergure et de la corde de l'aile :**
+
+   - Ajustement des dimensions de l'aile en fonction de l'allongement.
+
+10. **Calcul de la géométrie de l'empennage et des ailerons :**
+
+    - Calcul des surfaces des stabilisateurs, dérives et ailerons selon des proportions standard.
+
+---
+
+## Résultats
+
+Après exécution du script avec les données fournies, les résultats suivants sont obtenus :
+
+```
+Résultats des calculs pour l'avion (Hughes_H-1_Racer):
+-----------------------------------------------------
+1. Puissance mécanique en croisière (P_m) : 360.00 kW
+2. Puissance chimique nécessaire (P_c) : 1440.00 kW
+3. Débit massique de carburant (ṁ_c) : 0.0409 kg/s
+4. Masse totale de carburant (M_c) : 442.09 kg
+5. Masse totale de carburant avec marge (M_c_total) : 552.61 kg
+6. Masse minimale de carburant (m_c_min) : 452.10 kg
+   Masse minimale de carburant avec marge (m_c_min_total) : 565.12 kg
+
+Total des masses :
+ - Masse à vide : 1800 kg
+ - Masse du carburant (avec marge) : 552.61 kg
+ - Masse du pilote : 80 kg
+ - Masse des charges utiles : 20 kg
+= Masse totale de l'avion (m) : 2452.61 kg
+
+7. Nombre de Reynolds (Re) : 1.28e+07
+8. Coefficient de portance (C_z) :
+   - C_z fourni par PredimRC : 0.55
+   - C_z calculé pour la croisière : 0.20
+9. Surface alaire requise (S) : 17.00 m²
+10. Envergure (L) : 10.91 m
+    Corde moyenne (l̄) : 1.56 m
+11. Géométrie de l'empennage et des ailerons :
+    - Surface du stabilisateur horizontal (S_h) : 2.55 m²
+    - Surface de la dérive verticale (S_v) : 1.53 m²
+    - Surface des ailerons (S_a) : 1.70 m²
+    - Surface des volets mobiles (S_f) : 1.02 m²
+    - Bras de levier du stabilisateur (l_b) : 3.90 m
+```
+
+Ces résultats confirment la cohérence des hypothèses de conception et sont en accord avec les performances historiques du **Hughes H-1 Racer**.
+
+---
+
+## Personnalisation
+
+Pour adapter le script à un autre avion :
+
+1. **Modifier `avion_data.json` :**
+
+   - Remplacez les valeurs par celles correspondant à l'avion souhaité.
+   - Assurez-vous que toutes les clés nécessaires sont présentes.
+
+2. **Modifier `parametres.json` :**
+
+   - Ajustez les paramètres environnementaux si nécessaire (par exemple, pour une altitude différente).
+
+3. **Exécuter le script :**
+
+   - Lancez `python calculs_avion.py` pour générer les nouveaux calculs.
+
+---
+
+## Contributions
+
+Les contributions sont les bienvenues ! Si vous souhaitez améliorer le script, corriger des erreurs ou ajouter de nouvelles fonctionnalités, n'hésitez pas à :
+
+- **Forker** le dépôt.
+- **Créer une branche** pour vos modifications.
+- **Soumettre une pull request** avec une description claire de vos changements.
+
+---
 
 ## Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est sous licence **MIT**. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+**Auteur :** Dylan PERINETTI
+
+**Date :** 28 novembre 2024
