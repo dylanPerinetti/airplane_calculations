@@ -1,0 +1,16 @@
+{
+    "nom_de_l_avion": "Hughes_H-1_Racer",
+    "masse_a_vide": 1800,            
+    "puissance_moteur_max": 500000,  
+    "vitesse_croisiere": 111,        
+    "allongement": 7,                
+    "finesse": 8,                    
+    "corde_moyenne": 1.8,            
+    "surface_alaire_estimee": 17,    
+    "temps_vol": 10800,              
+    "masse_pilote": 80,              
+    "masse_charge_utile": 20,
+    "rendement_helice": 0.8,    
+    "rendement_moteur": 0.25 ,        
+    "coefficient_portance_fournie": 0.55    
+}
