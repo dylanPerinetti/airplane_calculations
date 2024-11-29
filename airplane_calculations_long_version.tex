@@ -1,0 +1,346 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\title{\textbf{Prédimensionnement d'un avion : une approche simplifiée}}
+\author{Dylan PERINETTI | CNAM}
+\date{28 novembre 2024}
+
+\begin{document}
+
+\maketitle
+\onehalfspacing
+
+\tableofcontents
+\newpage
+
+\section*{Résumé}
+
+Ce document présente le prédimensionnement simplifié d'un avion en se basant sur le Hughes H-1 Racer comme référence. Les calculs ont été automatisés à l'aide d'un script Python disponible sur le dépôt GitHub : \url{https://github.com/dylanPerinetti/airplane_calculations}. Cette approche permet une adaptation aisée à différentes configurations d'avions et améliore l'efficacité du processus de conception.
+
+\section{Introduction}
+
+Le prédimensionnement d'un avion est une étape cruciale dans le processus de conception aéronautique. Il implique de nombreux calculs complexes qui peuvent être sujets à des erreurs lorsqu'ils sont effectués manuellement. L'automatisation de ces calculs à l'aide d'un script Python offre une solution efficace pour améliorer la précision et la rapidité du processus.
+
+\section{Choix d’un avion historique comme référence}
+
+Pour ce prédimensionnement, le choix s’est porté sur un avion emblématique : le \textbf{Hughes H-1 Racer}, conçu en 1935 par Howard Hughes. Cet appareil monoplace a marqué l’histoire de l’aéronautique grâce à son design innovant et ses performances remarquables pour l’époque. Il était équipé d’un moteur radial \textbf{Pratt \& Whitney R-1535}, intégré dans une structure légère combinant bois et métal. Grâce à une aérodynamique soignée, l’avion a atteint une vitesse record de \textbf{566 km/h}, avec une autonomie maximale de \textbf{1 500 km}, bien qu’il ait été principalement optimisé pour des vols de l’ordre de \textbf{1 000 km}.
+
+Le H-1 Racer représente une référence pertinente pour établir des objectifs réalistes en termes de conception et de performance. En s’appuyant sur ses caractéristiques techniques, il devient possible de définir un cahier des charges prenant en compte les contraintes matérielles, technologiques et humaines de l’époque, tout en cherchant à optimiser l’efficacité aérodynamique et la légèreté structurelle.
+
+\section{Détermination des performances : vitesse et temps de trajet}
+
+En s’appuyant sur les données du Hughes H-1 Racer, une vitesse de croisière cible de \textbf{350 à 400 km/h} a été retenue pour ce prédimensionnement. Ce choix est motivé par plusieurs considérations pratiques. D’une part, cette vitesse, bien qu’inférieure à la vitesse maximale de l’appareil, permet de réduire la consommation en carburant tout en limitant la fatigue du pilote sur des trajets prolongés. D’autre part, elle correspond à un compromis entre les contraintes humaines et les capacités techniques.
+
+Pour une autonomie cible de \textbf{1 000 km}, cette vitesse assure un temps de vol de \textbf{2,5 à 3 heures}, aligné avec les limites physiologiques d’un pilote unique dans un cockpit non pressurisé. Par ailleurs, l’analyse du H-1 Racer met en évidence l’importance cruciale de la \textbf{légèreté de la structure} et des choix aérodynamiques dans l’optimisation des performances, tout en garantissant un niveau de sécurité et de confort adapté.
+
+\section{Hypothèse sur la masse de carburant et calcul de la puissance moteur}
+
+Pour le H-1 Racer, le rendement de l’hélice ($\nu_h$) est estimé à \textbf{0,8}, une valeur cohérente avec les performances des hélices métalliques de l’époque. La puissance mécanique nécessaire pour la vitesse de croisière ($P_m$) est calculée en fonction de la vitesse cible de \textbf{400 km/h} et des contraintes aérodynamiques. Compte tenu de la capacité du moteur \textbf{Pratt \& Whitney R-1535} (500 kW en puissance maximale), une puissance mécanique d’environ $P_m = 360 \, \text{kW}$ est retenue pour la croisière, correspondant à 72~\% de la capacité du moteur.
+
+En prenant un rendement thermique du moteur ($\nu_m$) de \textbf{0,25} et le pouvoir calorifique de l’essence ($PCI = 44 \times 10^6 \, \text{J/kg}$), la puissance chimique nécessaire ($P_c$) est donnée par :
+\[
+P_c = \frac{P_m}{\nu_m} = \frac{360}{0,25} = 1\,440 \, \text{kW}.
+\]
+Le débit massique de carburant ($\dot{m}_c$) est alors calculé par :
+\[
+\dot{m}_c = \frac{P_c}{\nu_h \nu_m PCI} = \frac{1\,440\,000}{0,8 \times 0,25 \times 44 \times 10^6} \approx 0{,}0409 \, \text{kg/s}.
+\]
+Sur une durée de vol estimée à \textbf{3 heures} ($10\,800 \, \text{s}$), la masse totale de carburant requise est donnée par :
+\[
+M_c = \dot{m}_c \cdot t = 0{,}0409 \times 10\,800 \approx 442 \, \text{kg}.
+\]
+En tenant compte d’une marge supplémentaire de \textbf{25 \%} pour les phases de décollage et de montée, la masse de carburant finale est ajustée à environ \textbf{553 kg}. Cette hypothèse est cohérente avec les performances du moteur et les limites structurelles du H-1 Racer.
+
+\section{Calcul de la masse minimale de carburant à emporter}
+
+Pour le H-1 Racer, on applique l’équation de la masse minimale de carburant à emporter ($m_c$) donnée par l’équation :
+\[
+m_c \geq \frac{P_m^0}{K \nu_m PCI} \left( 1 - e^{-K t_{tot}} \right),
+\]
+où :
+\begin{itemize}
+    \item $P_m^0$ est la puissance maximale du moteur, fixée à 500 kW pour le moteur Pratt \& Whitney R-1535,
+    \item $K = \dfrac{gV}{\nu_h \nu_m PCI f_{tot}}$,
+    \item $g = 9{,}81 \, \text{m/s}^2$,
+    \item $V = 111 \, \text{m/s}$ (400 km/h),
+    \item $\nu_h = 0{,}8$,
+    \item $\nu_m = 0{,}25$,
+    \item $PCI = 44 \times 10^6 \, \text{J/kg}$,
+    \item $f_{tot} = 8$ (finesse estimée pour l’époque).
+\end{itemize}
+
+En substituant ces valeurs dans $K$, on obtient :
+\[
+K = \frac{9{,}81 \times 111}{0{,}8 \times 0{,}25 \times 44 \times 10^6 \times 8} \approx 3{,}1 \times 10^{-6} \, \text{s}^{-1}.
+\]
+Pour un vol de 3 heures ($t_{tot} = 10\,800 \, \text{s}$) :
+\[
+m_c \geq \frac{500\,000}{3{,}1 \times 10^{-6} \times 44 \times 10^6} \left( 1 - e^{-3{,}1 \times 10^{-6} \times 10\,800} \right) \approx 483 \, \text{kg}.
+\]
+En ajoutant une marge de 25 \% pour le décollage et la montée, la masse minimale corrigée de carburant est :
+\[
+m_c \approx 604 \, \text{kg}.
+\]
+Ce calcul, proche de l’hypothèse précédente, valide les choix de conception pour la capacité de carburant.
+
+\section{Choix d’un moteur d’époque en fonction de la puissance calculée}
+
+En cohérence avec les résultats obtenus pour le H-1 Racer, où la puissance mécanique nécessaire pour un vol de croisière est estimée à \textbf{360 kW}, et en tenant compte d’une marge de \textbf{25 \%} pour assurer les phases de décollage et montée, la puissance maximale requise est d’environ \textbf{450 kW}.
+
+À cette époque, un choix pertinent serait le moteur radial \textbf{Pratt \& Whitney R-1535 Twin Wasp Junior}, utilisé historiquement sur des avions de performances similaires. Ce moteur, capable de délivrer jusqu'à \textbf{500 kW}, est bien adapté aux besoins en termes de puissance tout en offrant une fiabilité éprouvée.
+
+Son architecture compacte et sa capacité à fonctionner efficacement dans des conditions variées en font un candidat idéal pour répondre aux objectifs de conception. Ce choix garantit une performance en phase de croisière optimale tout en maintenant une puissance suffisante pour les phases critiques du vol, comme le décollage.
+
+\section{Calcul du nombre de Reynolds}
+
+Pour le H-1 Racer, le nombre de Reynolds ($Re$) est calculé en utilisant l’équation suivante :
+\[
+Re = \frac{V \cdot l}{\nu},
+\]
+où :
+\begin{itemize}
+    \item $V = 111 \, \text{m/s}$ (vitesse de croisière, soit 400 km/h),
+    \item $l = 1{,}8 \, \text{m}$ (corde moyenne estimée de l’aile),
+    \item $\nu = 15{,}6 \times 10^{-6} \, \text{m}^2/\text{s}$ (viscosité cinématique de l’air à une altitude typique de 1 000 m).
+\end{itemize}
+
+En substituant les valeurs, on obtient :
+\[
+Re = \frac{111 \times 1{,}8}{15{,}6 \times 10^{-6}} \approx 12{,}8 \times 10^6.
+\]
+Ce nombre de Reynolds élevé est caractéristique des écoulements turbulents autour de l’aile à cette vitesse. Il permet de déterminer les coefficients aérodynamiques (portance et traînée) à partir des polaires du profil d’aile. Ce résultat valide l’hypothèse d’un écoulement principalement turbulent, conforme aux attentes pour un avion de cette catégorie.
+
+\section{Détermination du coefficient de portance et de l’angle de calage}
+
+À partir des données obtenues dans \textit{PredimRC}, l’interpolation des polaires du profil d’aile du H-1 Racer indique un coefficient de portance $C_z = 0{,}55$ pour une vitesse de croisière de \textbf{400 km/h} ($111 \, \text{m/s}$). Ce $C_z$ est compatible avec les besoins de vol en palier et garantit une portance suffisante pour équilibrer le poids de l’avion.
+
+L’angle d’incidence correspondant est estimé à $2^\circ$, ce qui est cohérent pour un profil aérodynamique optimisé. Cet angle est adopté comme angle de calage de l’aile par rapport à l’axe longitudinal de l’avion. Ce choix permet de maximiser la portance tout en minimisant la traînée dans les conditions de croisière, favorisant une consommation de carburant optimale et une stabilité aérodynamique appropriée.
+
+\section{Calcul de la surface alaire}
+
+La surface alaire nécessaire ($S$) pour le H-1 Racer est calculée en utilisant l’équation suivante :
+\[
+S = \frac{2mg}{\rho C_z V^2},
+\]
+où :
+\begin{itemize}
+    \item $m = 2\,500 \, \text{kg}$ (masse totale avec carburant),
+    \item $g = 9{,}81 \, \text{m/s}^2$ (accélération gravitationnelle),
+    \item $\rho = 1{,}2 \, \text{kg/m}^3$ (densité de l’air à une altitude typique),
+    \item $C_z = 0{,}55$ (coefficient de portance en croisière),
+    \item $V = 111 \, \text{m/s}$ (vitesse de croisière).
+\end{itemize}
+
+En substituant les valeurs, on obtient :
+\[
+S = \frac{2 \times 2\,500 \times 9{,}81}{1{,}2 \times 0{,}55 \times 111^2} \approx 16{,}8 \, \text{m}^2.
+\]
+Cette surface alaire est cohérente avec les dimensions estimées du H-1 Racer, qui disposait d’une aile optimisée pour minimiser la traînée tout en offrant une portance suffisante à haute vitesse. Ce résultat valide les hypothèses de conception pour une configuration aérodynamique équilibrée entre performances et stabilité en vol.
+
+\section{Modification de l’envergure et de la corde de l’aile}
+
+À partir de la surface alaire calculée ($S = 16{,}8 \, \text{m}^2$) et en conservant un allongement typique pour un avion de l’époque ($\lambda = 7$), l’envergure ($L$) et la corde moyenne ($l$) sont déterminées en utilisant les relations suivantes :
+\[
+\lambda = \frac{L^2}{S}, \quad l = \frac{S}{L}.
+\]
+En isolant $L$, on obtient :
+\[
+L = \sqrt{\lambda \cdot S} = \sqrt{7 \times 16{,}8} \approx 10{,}8 \, \text{m}.
+\]
+La corde moyenne est alors :
+\[
+l = \frac{S}{L} = \frac{16{,}8}{10{,}8} \approx 1{,}56 \, \text{m}.
+\]
+Avec ces dimensions, l’aile conserve un rapport d’allongement équilibré, optimisant la portance tout en minimisant la traînée induite. Ce résultat correspond aux configurations typiques des ailes droites trapézoïdales utilisées sur des avions comme le H-1 Racer.
+
+\section{Calcul de la géométrie de l’empennage et des ailerons}
+
+La géométrie de l’empennage et des ailerons est calculée en suivant les proportions standards par rapport à la surface alaire ($S = 16{,}8 \, \text{m}^2$) :
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Surface du stabilisateur horizontal}  
+    Le stabilisateur représente environ 15 \% de la surface alaire :
+    \[
+    S_{\text{stab}} = 0{,}15 \times S = 0{,}15 \times 16{,}8 \approx 2{,}52 \, \text{m}^2.
+    \]
+    \item \textbf{Surface de la dérive verticale}  
+    La dérive équivaut à 60 \% de la surface du stabilisateur :
+    \[
+    S_{\text{dérive}} = 0{,}6 \times S_{\text{stab}} = 0{,}6 \times 2{,}52 \approx 1{,}51 \, \text{m}^2.
+    \]
+    \item \textbf{Surface des ailerons}  
+    Les ailerons occupent environ 10 \% de la surface alaire :
+    \[
+    S_{\text{ail}} = 0{,}1 \times S = 0{,}1 \times 16{,}8 \approx 1{,}68 \, \text{m}^2.
+    \]
+    \item \textbf{Surface des volets mobiles}  
+    Les volets représentent 40 \% de la surface des stabilisateurs :
+    \[
+    S_{\text{volets}} = 0{,}4 \times S_{\text{stab}} = 0{,}4 \times 2{,}52 \approx 1{,}01 \, \text{m}^2.
+    \]
+    \item \textbf{Bras de levier du stabilisateur}  
+    Le bras de levier, mesuré depuis le bord de fuite de l’aile, est approximativement 2,5 fois la corde moyenne de l’aile :
+    \[
+    l_{\text{bras}} = 2{,}5 \times l = 2{,}5 \times 1{,}56 \approx 3{,}9 \, \text{m}.
+    \]
+\end{enumerate}
+
+Ces dimensions garantissent une stabilité longitudinale et directionnelle optimale, tout en respectant les proportions classiques pour un avion de l’époque.
+
+\section{Implémentation du code Python}
+
+Pour automatiser les calculs précédemment effectués et permettre une adaptation aisée à d'autres configurations d'avions, un script Python a été développé. Le code et la documentation associés sont disponibles sur le dépôt GitHub : \url{https://github.com/dylanPerinetti/airplane_calculations}.
+
+\subsection{Structure du code}
+
+Le code est structuré de manière modulaire, facilitant la lecture et la maintenance. Voici les principales étapes du script :
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Chargement des données et extraction des variables} : Les données spécifiques à l'avion et les paramètres environnementaux sont chargés depuis des fichiers JSON (\texttt{avion\_data.json} et \texttt{parametres.json}). Les variables nécessaires aux calculs sont extraites des dictionnaires Python obtenus.
+    
+    \item \textbf{Calculs principaux et affichage des résultats} : Le script réalise les calculs en suivant l'ordre des sections précédentes du document et affiche les résultats. Il calcule notamment :
+    \begin{itemize}
+        \item La puissance mécanique nécessaire en croisière ($P_m$) et la puissance chimique nécessaire ($P_c$).
+        \item Le débit massique de carburant ($\dot{m}_c$) et la masse totale de carburant nécessaire, avec une marge pour le décollage et la montée.
+        \item La masse totale de l'avion.
+        \item Le nombre de Reynolds ($Re$).
+        \item Le coefficient de portance ($C_z$) calculé pour la croisière, permettant de vérifier la cohérence avec le $C_z$ fourni par \textit{PredimRC}.
+        \item La surface alaire requise ($S$), l'envergure ($L$) et la corde moyenne ($l$).
+        \item Les dimensions de l'empennage et des ailerons.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Explication détaillée du code}
+
+Le code commence par importer les modules nécessaires :
+
+\begin{verbatim}
+import json
+import math
+\end{verbatim}
+
+\subsubsection{Chargement des données et extraction des variables}
+
+Les données sont chargées à partir des fichiers JSON et les variables sont extraites :
+
+\begin{verbatim}
+with open('avion_data.json', 'r') as fichier_avion:
+    avion_data = json.load(fichier_avion)
+
+with open('parametres.json', 'r') as fichier_parametres:
+    parametres = json.load(fichier_parametres)
+
+# Extraction des variables
+nom_avion = avion_data['nom_de_l_avion']
+masse_a_vide = avion_data['masse_a_vide']
+# ... autres variables ...
+\end{verbatim}
+
+\subsubsection{Calculs principaux}
+
+Les calculs suivent l'ordre des sections précédentes :
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Puissance mécanique en croisière ($P_m$)} :
+
+    \begin{verbatim}
+    P_m = pourcentage_P_m * P_m0
+    \end{verbatim}
+
+    \item \textbf{Puissance chimique nécessaire ($P_c$)} :
+
+    \begin{verbatim}
+    P_c = P_m / nu_m
+    \end{verbatim}
+
+    \item \textbf{Débit massique de carburant ($\dot{m}_c$)} :
+
+    \begin{verbatim}
+    mpoint_c = P_m / (nu_h * nu_m * PCI)
+    \end{verbatim}
+
+    \item \textbf{Masse totale de carburant ($M_c$)} :
+
+    \begin{verbatim}
+    M_c = mpoint_c * t_vol
+    M_c_total = M_c * 1.25  # Marge de 25%
+    \end{verbatim}
+
+    \item \textbf{Masse totale de l'avion ($m$)} :
+
+    \begin{verbatim}
+    m = masse_a_vide + M_c_total + masse_pilote + masse_charge_utile
+    \end{verbatim}
+
+    \item \textbf{Nombre de Reynolds ($Re$)} :
+
+    \begin{verbatim}
+    Re = V * l_corde / nu_air
+    \end{verbatim}
+
+    \item \textbf{Coefficient de portance ($C_z$)} :
+
+    \begin{verbatim}
+    C_z_calculé = (2 * m * g) / (rho * S_alaire_estimee * V**2)
+    \end{verbatim}
+
+    \item \textbf{Surface alaire requise ($S$)} :
+
+    \begin{verbatim}
+    S_required = (2 * m * g) / (rho * C_z_calculé * V**2)
+    \end{verbatim}
+
+    \item \textbf{Envergure ($L$) et corde moyenne ($l$)} :
+
+    \begin{verbatim}
+    L = math.sqrt(lambda_aspect_ratio * S_required)
+    l = S_required / L
+    \end{verbatim}
+
+    \item \textbf{Géométrie de l'empennage et des ailerons} :
+
+    \begin{verbatim}
+    S_stab = 0.15 * S_required
+    # ... autres calculs ...
+    \end{verbatim}
+\end{enumerate}
+
+\subsubsection{Affichage des résultats}
+
+Les résultats sont affichés dans la console et écrits dans un fichier texte :
+
+\begin{verbatim}
+with open('predim_' + nom_avion + '.txt', 'w', encoding='utf-8') as fichier_sortie:
+    # Écriture des résultats
+\end{verbatim}
+
+\section{Conclusion}
+
+Ce travail a permis de réaliser un prédimensionnement simplifié du Hughes H-1 Racer en utilisant une approche automatisée via un script Python. L'automatisation des calculs a amélioré l'efficacité et la précision du processus, tout en facilitant l'adaptation à d'autres configurations d'avions. Les résultats obtenus sont cohérents avec les performances historiques de l'avion, validant ainsi les hypothèses et les méthodes employées.
+
+L'intégration de données historiques avec des outils modernes de programmation souligne le potentiel de l'ingénierie assistée par ordinateur dans le domaine aéronautique. Ce projet ouvre la voie à des études plus approfondies, telles que l'optimisation aérodynamique, l'analyse structurelle avancée ou l'incorporation de nouvelles technologies et matériaux.
+
+En conclusion, cette approche simplifiée, soutenue par l'automatisation des calculs, constitue un outil précieux pour les ingénieurs aéronautiques. Elle permet de gagner du temps, de minimiser les erreurs et d'explorer de nouvelles possibilités dans la conception d'avions. Le code développé est flexible et extensible, offrant une base solide pour l'enseignement, la recherche et le développement futurs dans le domaine de l'aéronautique.
+
+
+
+\section*{Références}
+
+\begin{itemize}
+    \item \textit{PredimRC} - Logiciel de prédimensionnement aéronautique d'aéromodélisme fourni par le CNAM.
+    \item Dépôt GitHub du projet - \url{https://github.com/dylanPerinetti/airplane_calculations}
+    \item Smithsonian National Air and Space Museum
+    \item Howard Hughes Historical Archives
+    \item Pratt \& Whitney Engine Data Archives
+\end{itemize}
+
+\end{document}

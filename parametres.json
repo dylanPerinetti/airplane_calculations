@@ -1,0 +1,6 @@
+{
+    "densite_air": 1.2,         
+    "viscosite_air": 15.6e-6,   
+    "gravite": 9.81,            
+    "pouvoir_calorifique": 44e6   
+}

@@ -1,0 +1,193 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\geometry{margin=2.5cm}
+
+\title{\textbf{Prédimensionnement Simplifié d'un Avion : \\ Implémentation d'un Code Python}}
+\author{Dylan PERINETTI}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section*{Résumé}
+
+Ce document présente l'implémentation d'un script Python pour automatiser les calculs de prédimensionnement simplifié d'un avion. Le code permet de charger des données spécifiques à un avion, d'effectuer les calculs nécessaires et de générer un rapport des résultats. Cette approche facilite l'adaptation à différentes configurations d'avions et améliore l'efficacité du processus de conception. Le code et la documentation sont disponibles sur le dépôt GitHub : \url{https://github.com/dylanPerinetti/airplane_calculations}
+
+\section{Introduction}
+
+Le prédimensionnement d'un avion est une étape cruciale dans le processus de conception aéronautique. Il implique de nombreux calculs qui peuvent être sujets à des erreurs lorsqu'ils sont effectués manuellement. L'automatisation de ces calculs à l'aide d'un script Python offre une solution efficace pour améliorer la précision et la rapidité du processus.
+
+\section{Implémentation du Code Python}
+
+Pour automatiser les calculs de prédimensionnement simplifié et permettre une adaptation aisée à d'autres configurations d'avions, un script Python a été développé. Ce script lit les données spécifiques à l'avion ainsi que les paramètres environnementaux à partir de fichiers JSON, effectue les calculs nécessaires et génère un rapport des résultats.
+
+\subsection{Structure du Code}
+
+Le code est structuré de manière modulaire, facilitant la lecture et la maintenance. Les principales étapes du script sont :
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Chargement des données et extraction des variables} : Les données spécifiques à l'avion et les paramètres environnementaux sont chargés depuis des fichiers JSON (\texttt{avion\_data.json} et \texttt{parametres.json}). Les variables nécessaires aux calculs sont extraites des dictionnaires Python obtenus.
+    
+    \item \textbf{Calculs principaux et affichage des résultats} : Le script réalise les calculs en suivant l'ordre des sections précédentes et affiche les résultats. Il calcule notamment :
+    \begin{itemize}
+        \item La puissance mécanique nécessaire en croisière ($P_m$) et la puissance chimique nécessaire ($P_c$).
+        \item Le débit massique de carburant ($\dot{m}_c$) et la masse totale de carburant nécessaire, avec une marge.
+        \item La masse totale de l'avion.
+        \item Le nombre de Reynolds ($Re$).
+        \item Le coefficient de portance ($C_z$) calculé pour la croisière, permettant de vérifier la cohérence avec le $C_z$ fourni par \textit{\textbf{PredimRC}}.
+        \item La surface alaire requise ($S$), l'envergure ($L$) et la corde moyenne ($l$).
+        \item Les dimensions de l'empennage et des ailerons.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Explication du Code}
+
+Le code commence par importer les modules nécessaires :
+
+\begin{verbatim}
+import json
+import math
+\end{verbatim}
+
+\subsubsection{Chargement des données et extraction des variables}
+
+Les données sont chargées à partir des fichiers JSON et les variables sont extraites :
+
+\begin{verbatim}
+with open('avion_data.json', 'r') as fichier_avion:
+    avion_data = json.load(fichier_avion)
+
+with open('parametres.json', 'r') as fichier_parametres:
+    parametres = json.load(fichier_parametres)
+
+# Extraction des variables
+nom_avion = avion_data['nom_de_l_avion']
+masse_a_vide = avion_data['masse_a_vide']
+# ... autres variables ...
+\end{verbatim}
+
+\subsubsection{Calculs principaux}
+
+Les calculs suivent l'ordre des sections précédentes :
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Puissance mécanique en croisière ($P_m$)} :
+    
+    \begin{equation}
+    P_m = \text{pourcentage}_{P_m} \times P_{m0}
+    \end{equation}
+    
+    \item \textbf{Puissance chimique nécessaire ($P_c$)} :
+    
+    \begin{equation}
+    P_c = \dfrac{P_m}{\nu_m}
+    \end{equation}
+    
+    \item \textbf{Débit massique de carburant ($\dot{m}_c$)} :
+    
+    \begin{equation}
+    \dot{m}_c = \dfrac{P_m}{\nu_h \times \nu_m \times \text{PCI}}
+    \end{equation}
+    
+    \item \textbf{Masse totale de carburant ($M_c$)} :
+    
+    \begin{equation}
+    M_c = \dot{m}_c \times t_{\text{vol}} \times (1 + \text{marge})
+    \end{equation}
+    
+    \item \textbf{Masse totale de l'avion ($m$)} :
+    
+    \begin{equation}
+    m = m_{\text{vide}} + M_c + m_{\text{pilote}} + m_{\text{charge utile}}
+    \end{equation}
+    
+    \item \textbf{Nombre de Reynolds ($Re$)} :
+    
+    \begin{equation}
+    Re = \dfrac{V \times l_{\text{corde}}}{\nu_{\text{air}}}
+    \end{equation}
+    
+    \item \textbf{Coefficient de portance ($C_z$)} :
+    
+    \begin{equation}
+    C_z = \dfrac{2 \times m \times g}{\rho \times S \times V^2}
+    \end{equation}
+    
+    \item \textbf{Surface alaire requise ($S$)} :
+    
+    \begin{equation}
+    S = \dfrac{2 \times m \times g}{\rho \times C_z \times V^2}
+    \end{equation}
+    
+    \item \textbf{Envergure ($L$) et corde moyenne ($l$)} :
+    
+    \begin{equation}
+    L = \sqrt{\lambda \times S}
+    \end{equation}
+    
+    \begin{equation}
+    l = \dfrac{S}{L}
+    \end{equation}
+    
+    \item \textbf{Géométrie de l'empennage et des ailerons} :
+    
+    \begin{equation}
+    S_{\text{stab}} = 0{,}15 \times S
+    \end{equation}
+    
+    \begin{equation}
+    S_{\text{dériv}} = 0{,}6 \times S_{\text{stab}}
+    \end{equation}
+    
+    \begin{equation}
+    S_{\text{ail}} = 0{,}1 \times S
+    \end{equation}
+    
+    \begin{equation}
+    l_{\text{bras}} = 2{,}5 \times l
+    \end{equation}
+\end{enumerate}
+
+\section{Résultats Obtenus}
+
+En exécutant le script avec les données du Hughes H-1 Racer, les résultats suivants sont obtenus :
+
+\begin{itemize}
+    \item \textbf{Puissance mécanique en croisière} : $P_m = 360 \, \text{kW}$.
+    \item \textbf{Masse totale de carburant avec marge} : $M_c = 553 \, \text{kg}$.
+    \item \textbf{Masse totale de l'avion} : $m = 2\,453 \, \text{kg}$.
+    \item \textbf{Nombre de Reynolds} : $Re = 12{,}8 \times 10^6$.
+    \item \textbf{Coefficient de portance calculé} : $C_z = 0{,}20$.
+    \item \textbf{Surface alaire requise} : $S = 17{,}00 \, \text{m}^2$.
+    \item \textbf{Envergure et corde moyenne} : $L = 10{,}91 \, \text{m}$ et $l = 1{,}56 \, \text{m}$.
+    \item \textbf{Dimensions de l'empennage et des ailerons} : Calculées selon les proportions standard.
+\end{itemize}
+
+Ces résultats confirment la cohérence des hypothèses de conception et valident les choix effectués pour les dimensions et les performances de l'avion.
+
+\section{Conclusion}
+
+Le développement de ce script Python a permis de consolider les calculs effectués lors du prédimensionnement simplifié de l'avion, en garantissant une cohérence entre les différentes étapes. Les résultats obtenus sont en accord avec les performances historiques du Hughes H-1 Racer, confirmant ainsi la validité des méthodes employées.
+
+\section*{Références}
+
+\begin{itemize}
+    \item \textit{PredimRC} - Logiciel de prédimensionnement aéronautique d'aéromodélisme fourni par le CNAM.
+    \item Documentation Python - \url{https://docs.python.org/fr/3/}
+    \item Dépôt GitHub du projet - \url{https://github.com/dylanPerinetti/airplane_calculations}
+\end{itemize}
+
+\end{document}
