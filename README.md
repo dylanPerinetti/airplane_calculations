@@ -37,8 +37,8 @@ Le script Python fourni permet de :
 1. **Cloner le dépôt :**
 
    ```bash
-   git clone https://github.com/votre-utilisateur/predimensionnement-avion.git
-   cd predimensionnement-avion
+   git clone https://github.com/dylanPerinetti/airplane_calculations/
+   cd airplane_calculations
    ```
 
 2. **Vérifier l'environnement Python :**
